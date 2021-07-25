@@ -1,4 +1,3 @@
-Русская версия:
 
 И так, приветствую тебя в замечательно движке ActiveRender!
 Тут ты прочитаешь подробные инструкции по созданию анимации любой сложности 
@@ -54,6 +53,13 @@ Drawer - Главный класс отрисовки
 Objects - Класс хранит все точки для рендеринга, так же может их перемещать
 имеет следующие методы - {
     move() - служит для перемещения объекта
+    get() - возвращает все точки объекта по его ID
+}
+
+Physics - физический класс, иммеет готовые функция для вычеслений
+имеет слудующие методы - {
+    get_mass_all() - возвращаят массы всех точек
+    get_mass() - возвращает массу определённого объекта
 }
 
 5.0
@@ -63,70 +69,3 @@ Objects - Класс хранит все точки для рендеринга,
 >>> python start.py
 
 наслаждайся!
-
-
-English version:
-
-And so, I welcome you to the wonderful ActiveRender engine!
-Here you will read detailed instructions for creating animations of any complexity
-
-1.0 Instructions to start
-And so, you unpacked the archive with the engine files
-Let's create a project!
-To do this, open the terminal / console/cmd and go to the directory with ActiveRender
-Then run the following command:
-
->>> python app.py
-
-If you continue, enter the project name, console resolution, display delay, pixel symbol
-Enter everything in the order in which the program asks
-The console resolution can be taken in this way - >
-
-open the console -> right - click on its upper part -> select properties ->
--> in the window that appears, select "locations" -> now look at the window size item, the width and height that you will have to enter will be displayed there!
-
-2.0
-And so, you have created a project
-Now to create (a class/function/model/script) , you need to open the terminal/console/cmd again
-and go to the directory with ActiveRender, run the command
-there again
-
->>> python app.py
-
-and choose what you need
-The engine will do everything for you by itself
-
-3.0
-List of decorators
-
-@onUpdate-the function is called at the beginning of the loop (not at the time of rendering)
-(Stored in functions.onUpdateDecorator)
-
-@OnStart-the function is called alone and only at the start of rendering
-(Stored in functions.onStartDecorator)
-
-@OnRender-the function is called at the beginning of rendering
-(Stored in the instance of the class (render), in the file environment.py)
-
-@CreateObject-object creation function (should return something like this [[0,0], [0,1]],
-that is, the coordinates of the points in the numpy array format)
-
-The list will be replenished!
-
-4.0
-List of classes
-
-Drawer - The main drawing class
-
-Objects-The class stores all the points for rendering, it can also move them
-has the following methods - {
-move () - serves to move the object
-}
-
-5.0
-And so when you have already done your animation/render, let's take a look at it!
-open the terminal / console/cmd again and go to the directory with ActiveRender there run the command
-
->>> python start.py
-
-enjoy it!

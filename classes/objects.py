@@ -13,7 +13,7 @@ class Objects:
         self.Screen_pointers_id = [1] # Этот массив хранит количевство точек до определённого объекта
 
     # Движение объекта по заданым координатам
-    def moveObject(self, indexobject: int, x, y): 
+    def move(self, indexobject: int, x, y): 
 
         index = 0
         indexobject = indexobject
@@ -32,7 +32,7 @@ class Objects:
                     break
 
 
-    def getObject(self, indexobject: int,): 
+    def get(self, indexobject: int,): 
 
         index = 0
         indexobject = indexobject

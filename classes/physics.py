@@ -7,14 +7,22 @@ class Physics:
         
         with open('./config.json') as f:
             data = json.load(f)
-        
-        self.acceleration = data['physics_config']['acceleration of free fall']
-        self.inertia = data['physics_config']['inertia multiplier']
-        self.mass = data['physics_config']['pixel mass']
-        self.power = data['physics_config']['power in one point']
 
-    def get_mass(self, objects_):
+        acceleration = data['physics_config']['acceleration of free fall']
+        inertia = data['physics_config']['inertia multiplier']
+        mass = data['physics_config']['pixel mass']
+        power = data['physics_config']['power in one point']
+
+        self.acceleration = acceleration
+        self.inertia = inertia
+        self.mass = mass
+        self.power = power
+
+    def get_mass_all(self, objects_):
         return len(objects_.Screen_pointers) * self.mass
+
+    def get_mass(self, objects_, id):
+        return len(objects_.get(id)) * self.mass
 
     @property
     def inertia(self):
