@@ -9,7 +9,7 @@ with open('./config.json') as f:
 widht = data['render_config']['withd']
 height = data['render_config']['height']
 
-def elipse(x, y, r):
+def circle(x, y, r):
 
     points = np.array([[MINIMAL,MINIMAL],[MINIMAL,MINIMAL]])
 

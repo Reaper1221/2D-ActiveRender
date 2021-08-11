@@ -1,5 +1,8 @@
 import numpy as np
 import time
+import threading as tr
+
+MINIMAL = -100000000000000000000000000000000000000000
 
 class Drawer:
 
@@ -14,6 +17,7 @@ class Drawer:
         global withd, height
         withd,height = withd1, height1
 
+        self.bufer = False
         self.__EmptyScreen() # Создаём пустой дисплей
         self.render_calls = 0 # Хранит количевство вызовов рендера
         self.render_time = 0 # Хранит длительность последний отрисовки
@@ -29,19 +33,74 @@ class Drawer:
 
         bufer = np.array([])
         self.Screen = np.array([[]])
-        
-        z = 1
-        for y in range(self.height):
-            if z == 1:
-                for x in range(self.withd):     
-                    if x-1 == self.withd: 
-                        bufer = np.append(bufer, ['\n'])
-                        break
-                    
-                    else: bufer = np.append(bufer, ["."])
-                    z = z + 1
-            self.Screen = np.append(self.Screen, [bufer])
 
+        if self.bufer:
+            self.Screen = self.__EmptyScreenbufer
+        else:
+            for x in range(self.withd):     
+                bufer = np.append(bufer, ["."])
+
+            for y in range(self.height):
+                self.Screen = np.append(self.Screen, [bufer])
+            
+            self.bufer = True
+        
+        self.__EmptyScreenbufer = self.Screen
+
+
+    def duoRender(self, objects):
+
+        if len(objects.Screen_pointers) % 2 == 1: objects.Screen_pointers = np.append(objects.Screen_pointers, [[MINIMAL,MINIMAL]], axis=0)
+
+        t = time.time()
+
+        self.__EmptyScreen()
+
+        args_point = 0
+        if len(self.onRenderFunc) != 0: 
+            for func in self.onRenderFunc:
+                func(self.onRenderFuncArgs[args_point])
+                args_point = args_point + 1
+
+        def duoThread(self, objects):
+            for b in range(int(len(objects.Screen_pointers)/2)):
+            
+                if type(objects.Screen_pointers[b-1, 0]) != type(str()) and type(objects.Screen_pointers[b-1, 1]) != type(str()):
+                    x = objects.Screen_pointers[b-1, 0] - 1
+                    y = objects.Screen_pointers[b-1, 1] - 1
+
+
+                    if x < self.withd and y < self.height and x >= 0 and y >= 0: 
+                        self.Screen[int(y * self.withd + x - 1)] = self.objectSymbol
+
+        def oneThread(self, objects):
+            u = int(len(objects.Screen_pointers)/2)
+
+            for b in range(int(len(objects.Screen_pointers)/2)):
+                
+                if type(objects.Screen_pointers[b-1+u, 0]) != type(str()) and type(objects.Screen_pointers[b-1+u, 1]) != type(str()):
+                    x = objects.Screen_pointers[b-1+u, 0] - 1
+                    y = objects.Screen_pointers[b-1+u, 1] - 1
+
+
+                    if x < self.withd and y < self.height and x >= 0 and y >= 0: 
+                        self.Screen[int(y * self.withd + x - 1)] = self.objectSymbol
+
+        duoRenders = tr.Thread(target=duoThread, args=(self, objects))
+        duoRenders.start()
+        oneRenders = tr.Thread(target=oneThread, args=(self, objects))
+        oneRenders.start()
+            
+
+        self.render_calls = self.render_calls + 1
+        oneRenders.join()
+        duoRenders.join()
+
+        d = ""
+        for x in range(len(self.Screen)):
+            d = d + str(self.Screen[x-1])
+        print(d)
+        self.render_time = time.time() - t
 
     # Метод обновления экрана
     def render(self, objects):

@@ -11,7 +11,7 @@
     "project_config": {
         "name": "test",
         "project_name": "developing",
-        "start?": 0
+        "start?": 1
     },
     "render_config": {
         "framerate": 60,

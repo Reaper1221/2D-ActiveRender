@@ -52,6 +52,8 @@ class Objects:
 
         return points
 
+    def get_all(self):
+        return self.Screen_pointers
 
     # Ошибка не верного результата функции декоратора CreateObject
     def __DecoratorObjectError(self, func_name: str):
