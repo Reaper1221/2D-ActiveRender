@@ -15,7 +15,7 @@ if len(onStartDecorator.onStartFunc) != 0:
 while True:
 
     try:
-        time.sleep(1/drawer_.FPS)
+        # time.sleep(1/drawer_.FPS)
         # Запускаем функции (Если они есть)
         args_point = 0
         if len(onUpdateDecorator.onUpdateFunc) != 0: 
@@ -23,7 +23,9 @@ while True:
                 func(onUpdateDecorator.onUpdateFuncArgs[args_point])
                 args_point = args_point + 1
 
-        drawer_.render(objects_)
+        drawer_.QuadRender(objects_)
+
+        print(0/0)
 
     except KeyboardInterrupt:
         # print(f"")

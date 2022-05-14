@@ -15,7 +15,7 @@
     },
     "render_config": {
         "framerate": 60,
-        "height": 73,
+        "height": 64,
         "symbol": "&",
         "withd": 237
     }

@@ -47,6 +47,95 @@ class Drawer:
         
         self.__EmptyScreenbufer = self.Screen
 
+    def QuadRender(self, objects):
+
+        if len(objects.Screen_pointers) % 2 == 1: objects.Screen_pointers = np.append(objects.Screen_pointers, [[MINIMAL,MINIMAL]], axis=0)
+
+        t = time.time()
+
+        self.__EmptyScreen()
+
+        args_point = 0
+        if len(self.onRenderFunc) != 0: 
+            for func in self.onRenderFunc:
+                func(self.onRenderFuncArgs[args_point])
+                args_point = args_point + 1
+
+        def duoThread(self, objects):
+
+            u = int(len(objects.Screen_pointers)/4)
+
+            for b in range(u):
+            
+                if type(objects.Screen_pointers[b-1+u,  0]) != type(str()) and type(objects.Screen_pointers[b-1, 1]) != type(str()):
+                    x = objects.Screen_pointers[b-1+u,  0] - 1
+                    y = objects.Screen_pointers[b-1+u,  1] - 1
+
+
+                    if x < self.withd and y < self.height and x >= 0 and y >= 0: 
+                        self.Screen[int(y * self.withd + x - 1)] = self.objectSymbol
+
+        def oneThread(self, objects):
+
+            u = int(len(objects.Screen_pointers)/4)
+
+            for b in range(u):
+                
+                if type(objects.Screen_pointers[b-1, 0]) != type(str()) and type(objects.Screen_pointers[b-1+u, 1]) != type(str()):
+                    x = objects.Screen_pointers[b-1, 0] - 1
+                    y = objects.Screen_pointers[b-1, 1] - 1
+
+
+                    if x < self.withd and y < self.height and x >= 0 and y >= 0: 
+                        self.Screen[int(y * self.withd + x - 1)] = self.objectSymbol
+
+        def ThreeThread(self, objects):
+
+            u = int(len(objects.Screen_pointers)/4)
+
+            for b in range(u):
+            
+                if type(objects.Screen_pointers[b-1+u*2,  0]) != type(str()) and type(objects.Screen_pointers[b-1, 1]) != type(str()):
+                    x = objects.Screen_pointers[b-1+u*2,  0] - 1
+                    y = objects.Screen_pointers[b-1+u*2,  1] - 1
+
+
+                    if x < self.withd and y < self.height and x >= 0 and y >= 0: 
+                        self.Screen[int(y * self.withd + x - 1)] = self.objectSymbol
+
+        def FourThread(self, objects):
+
+            u = int(len(objects.Screen_pointers)/4)
+
+            for b in range(u):
+                
+                if type(objects.Screen_pointers[b-1+u*3,  0]) != type(str()) and type(objects.Screen_pointers[b-1, 1]) != type(str()):
+                    x = objects.Screen_pointers[b-1+u*3,  0] - 1
+                    y = objects.Screen_pointers[b-1+u*3,  1] - 1
+
+
+                    if x < self.withd and y < self.height and x >= 0 and y >= 0: 
+                        self.Screen[int(y * self.withd + x - 1)] = self.objectSymbol
+
+        FourRenders = tr.Thread(target=FourThread, args=(self, objects))
+        FourRenders.start()
+        ThreeRenders = tr.Thread(target=ThreeThread, args=(self, objects))
+        ThreeRenders.start()
+        duoRenders = tr.Thread(target=duoThread, args=(self, objects))
+        duoRenders.start()
+        oneRenders = tr.Thread(target=oneThread, args=(self, objects))
+        oneRenders.start()
+            
+
+        self.render_calls = self.render_calls + 1
+        oneRenders.join()
+
+        d = ""
+        for x in range(len(self.Screen)):
+            d = d + str(self.Screen[x-1])
+        print(d)
+        self.render_time = time.time() - t
+
 
     def duoRender(self, objects):
 
@@ -94,7 +183,6 @@ class Drawer:
 
         self.render_calls = self.render_calls + 1
         oneRenders.join()
-        duoRenders.join()
 
         d = ""
         for x in range(len(self.Screen)):
