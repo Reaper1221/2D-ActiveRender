@@ -2,11 +2,14 @@ import os
 import json
 
 def start_project():
-    fps = int(input("please enter the maximum fps: "))
+    fps = int(input("please enter the fps for animate: "))
     withd = int(input("please enter the width: "))
     height = int(input("please enter the height: "))
     project_name = input("please enter the project name: ")
     render_symbol = input("please enter the pixel symbol: ")
+    debug = bool(input("do you want to use debug? 1. Yes 0. No: "))
+    move_obj = bool(input("do you want to use move_obj() ? 1. Yes 0. No: "))
+    del_obj = bool(input("do you want to use del_obj() ? 1. Yes 0. No: "))
 
     with open('config.json') as f:
         data = json.load(f)
@@ -15,6 +18,10 @@ def start_project():
     data["render_config"]['height'] = height
     data["render_config"]['framerate'] = fps
     data["render_config"]['symbol'] = render_symbol
+
+    data['debug_config']['mode'] = debug
+    data['engine_config']['movment-points'] = move_obj
+    data['engine_config']['del-points'] = del_obj
 
     data["project_config"]['name'] = project_name
     data["project_config"]['start?'] = 1
@@ -45,7 +52,7 @@ def Create():
     elif a == 2:
         os.chdir("models")
         obj = open(f"{name}.py", "w")
-        obj.write(f"# !{os.getcwd()}\nfrom math import *\nimport json\nimport numpy as np\n\nMINIMAL = -1000000000000000000000000000000000000000000000000\nEPSILON = 2.2\n\nwith open('./config.json') as f:\n    data = json.load(f)\nwidht = data['render_config']['withd']\nheight = data['render_config']['height']\n\ndef {name}(x, y):\n    # {name} model is wonderful\n\n    points = np.array([[MINIMAL,MINIMAL],[MINIMAL,MINIMAL]])\n\n    return points")
+        obj.write(f"# !{os.getcwd()}\nfrom math import *\nimport json\nimport numpy as np\n\nMINIMAL = -1000000000000000000000000000000000000000000000000\nEPSILON = 2.2\n\nwith open('./config.json') as f:\n    data = json.load(f)\nwidht = data['render_config']['withd']\nheight = data['render_config']['height']\n\ndef {name}(cortej):\n    # {name} model is wonderful\n\n    x, y = cortej[0], cortej[1] \n    points = np.array([[MINIMAL,MINIMAL],[MINIMAL,MINIMAL]])\n\n    return points")
         obj.close()
         obj = open("__init__.py", "a+")
         obj.write(f"\n# !{os.getcwd()}\{name} - directory of this file\nfrom . import {name}")
@@ -63,7 +70,7 @@ def Create():
     elif a == 4: 
         os.chdir("scripts")
         obj = open(f"{name}.py", "w")
-        obj.write(f"# !{os.getcwd()}\nfrom environment import objects_\nfrom functions import onStartDecorator\nfrom functions import onUpdateDecorator\nfrom models import *\n\n@objects_.createObject(True)\ndef elipse_func(x,y,r):\n    return elipse.elipse(x,y,r)\n\n@onStartDecorator.onStart(\"hello World!\")\ndef start(text):\n    elipse_func(60,20,10)\n    print(text)\n    update()\n\n@onUpdateDecorator.onUpdate(True)\ndef update(isTrue):\n    if isTrue:\n        print(\"Hello World!\")\n\nstart()\n")
+        obj.write(f"# !{os.getcwd()}\nfrom environment import *\nfrom functions import onStartDecorator\nfrom functions import onUpdateDecorator\nfrom models import *\n\ninit_script = False\n\n@objects_.createObject(True)\ndef elipse_func(x,y,r):\n    return elipse.elipse((x,y,r))\n\n@onStartDecorator.onStart(True)\ndef start(isTrue):\n    if init_script:\n        elipse_func(10,10,5)\n    \n\n@onUpdateDecorator.onUpdate(True)\ndef update(isTrue):\n    if init_script:\n        pass\n\nupdate()\nstart()\n\nif __name__ == \"scripts.{name}\": \n    init_script = True")
         obj.close()
         obj = open("__init__.py", "a+")
         obj.write(f"\n# !{os.getcwd()}\{name} - directory of this file\nfrom . import {name}")
@@ -72,20 +79,20 @@ def Create():
     print("succesfuly!")
 
 def Change():
-    input_int = int(input("What do you want change?\n[1]physics\n[2]light\n[3]project name\n>>>"))
+    input_int = int(input("What do you want change?\n[1]render\n[2]project name\n>>>"))
     with open('config.json') as f:
         data = json.load(f)
 
     if input_int == 1:
-        data['physics_config']['acceleration of free fall'] = float(input("please enter the acceleration of free fall: "))
-        data['physics_config']['pixel mass'] = float(input("please enter the pixel mass: "))
-        data['physics_config']['power in one point'] = float(input("please enter the power in one point: "))
-        data['physics_config']['inertia multiplier'] = float(input("please enter the inertia multiplier: "))
-    
-    elif input_int == 2: 
-        data['light_config']['light_power'] = float(input("please enter the light_power: "))
+        data['render_config']['framerate'] = float(input("please enter the framerate: "))
+        data['render_config']['height'] = float(input("please enter the height: "))
+        data['render_config']['symbol'] = float(input("please enter the symbol: "))
+        data['render_config']['withd'] = float(input("please enter the withd: "))
+        data['debug_config']['mode'] = bool(input("do you want to use debug? 1. Yes 0. No: "))
+        data['engine_config']['movment-points'] = bool(input("do you want to use move_obj() ? 1. Yes 0. No: "))
+        data['engine_config']['del-points'] = bool(input("do you want to use del_obj() ? 1. Yes 0. No: "))
 
-    elif input_int == 3: 
+    elif input_int == 2: 
         data['project_config']['project_name'] = input('Please enter the new project name: ')
 
     with open('config.json', 'w') as f:
@@ -107,18 +114,19 @@ if __name__ == "__main__":
 
 # планы
 """
-1. Добавить новых фигур
+1. Добавить новых фигур 
 2. Добавить новых декораторов
 3. Оптимизировать всё по максимому 
 4. Добавить настройки редеринга +
 5. Глобальное окружение + 
-6. Освещение
-7. Физика
+6. Освещение delete
+7. Физика delete
 8. Полная оптимизация всего и вся
 9. Убрать артефакты которые происходят при движении объекта +
-10. Перевести все коментарии на английский язык
+10. Перевести все коментарии на английский язык 
 11. Реализовать демонстрацию {
     Всё рендериться на одном компьютере после чего уже передаётся готовая картинка другому пользователю
     }
-12. Упростить програмирование...    
+12. Упростить программирование...    
+13. Серверное программирование 
 """

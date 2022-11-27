@@ -9,7 +9,9 @@ with open('./config.json') as f:
 widht = data['render_config']['withd']
 height = data['render_config']['height']
 
-def circle(x, y, r):
+def circle(cortej):
+
+    x, y, r = cortej[0],cortej[1],cortej[2],
 
     points = np.array([[MINIMAL,MINIMAL],[MINIMAL,MINIMAL]])
 

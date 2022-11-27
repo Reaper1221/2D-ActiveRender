@@ -1,22 +1,26 @@
 {
-    "light_config": {
-        "light_power": 94.432
-    },
-    "physics_config": {
-        "acceleration of free fall": 9.8,
-        "inertia multiplier": 3.2,
-        "pixel mass": 2.0,
-        "power in one point": 1.3
-    },
     "project_config": {
         "name": "test",
         "project_name": "developing",
-        "start?": 1
+        "start?": 0
     },
     "render_config": {
-        "framerate": 60,
-        "height": 64,
-        "symbol": "&",
-        "withd": 237
+        "framerate": 16,
+        "height": 58,
+        "symbol": "#",
+        "withd": 116
+    },
+    "debug_config": {
+        "mode": true
+    },
+    "engine_config": {
+        "max-points": 20000,
+        "max-points-size-mb": 2,
+        "max-programm-size": 50,
+        "max-optimize-circle": 50,
+        "minimal-point": -1000,
+        "optimize-memory": true,
+        "movment-points": true,
+        "del-points": true
     }
 }

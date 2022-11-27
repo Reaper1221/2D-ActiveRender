@@ -3,13 +3,15 @@ import json
 import numpy as np
 
 MINIMAL = -10000000000000000000000000000000000000000000000000
-EPSILON = 2.2
+
 with open('./config.json') as f:
     data = json.load(f)
 widht = data['render_config']['withd']
 height = data['render_config']['height']
 
-def square(x, y, scalex, scaley):
+def square(cortej):
+
+    x, y, scalex, scaley = cortej[0],cortej[1],cortej[2],cortej[3],
 
     points = np.array([[MINIMAL,MINIMAL],[MINIMAL,MINIMAL]])
 
